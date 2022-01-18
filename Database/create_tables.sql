@@ -5,11 +5,11 @@ use `SpeedyGad`;
 create table Users
 (
     ID       int unsigned auto_increment primary key,
-    login    varchar(30)  not null,
+    login    varchar(50)  not null,
     password varchar(100) not null,
     type     enum ('worker', 'manager', 'admin'),
-    name     varchar(15)  not null,
-    lastname varchar(15)  not null,
+    name     varchar(50)  not null,
+    lastname varchar(50)  not null,
     gender   enum ('M', 'K')
 );
 create table Customers
@@ -43,8 +43,8 @@ create table Models
 create table Stores
 (
     ID           int unsigned auto_increment primary key,
-    city         varchar(30) not null,
-    street       varchar(30) not null,
+    city         varchar(50) not null,
+    street       varchar(50) not null,
     number       varchar(4)  not null,
     zip_code     char(5)     not null,
     phone_number int unsigned,

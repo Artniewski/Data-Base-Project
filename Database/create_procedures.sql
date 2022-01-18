@@ -51,3 +51,22 @@ end;
 $$
 DELIMITER ;
 
+
+DELIMITER $$
+drop procedure if exists add_customer;
+create procedure add_customer(IN n varchar(50), ln varchar(50), pn int, em varchar(50))
+begin
+    insert into Customers (name, lastname, phone_number, email) value (n, ln, pn, em);
+end;
+$$
+DELIMITER ;
+
+
+DELIMITER $$
+drop procedure if exists add_brand;
+create procedure add_brand(IN n varchar(50), c varchar(50))
+begin
+    insert into Brands (name, country) value (n, c);
+end;
+$$
+DELIMITER ;
