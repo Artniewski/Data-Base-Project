@@ -43,6 +43,7 @@ create table Models
 create table Stores
 (
     ID           int unsigned auto_increment primary key,
+    city         varchar(30) not null,
     street       varchar(30) not null,
     number       varchar(4)  not null,
     zip_code     char(5)     not null,
