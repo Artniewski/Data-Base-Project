@@ -15,9 +15,9 @@ create table Users
 create table Customers
 (
     ID           int auto_increment primary key,
-    name         varchar(50) not null,
-    lastname     varchar(50) not null,
-    phone_number int         not null,
+    name         varchar(50)  not null,
+    lastname     varchar(50)  not null,
+    phone_number int unsigned not null,
     email        varchar(50),
     check ( phone_number >= 100000000 and phone_number <= 999999999)
 );
@@ -31,10 +31,10 @@ create table Brands
 create table Models
 (
     ID        int auto_increment primary key,
-    brandID   int,
+    brandID   int unsigned,
     name      varchar(50) not null,
-    price     float,
-    max_speed dec(3, 2),
+    price     float unsigned,
+    max_speed dec(3, 2) unsigned,
     foreign key (brandID) references Brands (ID),
     check ( max_speed > 0 ),
     check ( price > 0 )
@@ -46,14 +46,14 @@ create table Stores
     street       varchar(30) not null,
     number       varchar(4)  not null,
     zip_code     char(5)     not null,
-    phone_number int,
+    phone_number int unsigned,
     check ( phone_number >= 100000000 and phone_number <= 999999999 )
 );
 
 create table Cars_in_stores
 (
-    modelID  int,
-    storeID  int,
+    modelID  int unsigned,
+    storeID  int unsigned,
     quantity int unsigned,
     color    varchar(20) not null,
     primary key (modelID, storeID),
@@ -65,12 +65,12 @@ create table Cars_in_stores
 create table Orders
 (
     ID         int auto_increment primary key,
-    customerID int,
-    modelID    int,
-    storeID    int,
-    userID     int,
+    customerID int unsigned,
+    modelID    int unsigned,
+    storeID    int unsigned,
+    userID     int unsigned,
     color      varchar(20) not null,
-    date       date,
+    date       date        not null,
     status     enum ('pending', 'done', 'cancelled'),
     foreign key (customerID) references Customers (ID),
     foreign key (modelID) references Models (ID),
