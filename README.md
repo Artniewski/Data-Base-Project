@@ -1,2 +1,2 @@
-# Projekt_bazy_danych
-Ja i muj ziom bandyta robimy bassskę
+#Projekt - Bazy Danych
+Celem projektu jest stworzenie aplikacji obsługującej bazę danych, pomagającej w zarządzaniu siecią salonów samochodowych SpeedyGad. Aplikacja będzie oparta o relacyjną bazę danych z użyciem języka SQL. 
