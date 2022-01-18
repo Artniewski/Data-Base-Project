@@ -50,3 +50,7 @@ begin
 end;
 $$
 DELIMITER ;
+
+DELIMITER $$
+drop procedure if exists add_store;
+

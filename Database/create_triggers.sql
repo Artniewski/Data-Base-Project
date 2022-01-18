@@ -1,8 +1,8 @@
 USE `SpeedyGad`;
 
 delimiter //
-DROP TRIGGER IF EXISTS remove_cars_in_stroes_if_0_left;
-CREATE TRIGGER remove_cars_in_stroes_if_0_left
+DROP TRIGGER IF EXISTS remove_cars_from_stroes_if_0_left;
+CREATE TRIGGER remove_cars_from_stroes_if_0_left
     AFTER UPDATE
     ON Cars_in_stores
     FOR EACH ROW
