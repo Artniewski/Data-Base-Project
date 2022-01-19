@@ -6,7 +6,7 @@ if (typeof localStorage === "undefined" || localStorage === null) {
     const LocalStorage = require('node-localstorage').LocalStorage;
     localStorage = new LocalStorage('./info');
 }
-const appPool = require('../connection')
+const appPool = require('../connection').appPool
 
 function isLoggedIn(req, res, next) {
     if (localStorage.getItem("isLoggedIn")) {
