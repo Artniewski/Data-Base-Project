@@ -1,3 +1,5 @@
 .idea/
 App/node_modules
-App/scratch
+App/info/
+.DS_Store
+App/.DS_Store

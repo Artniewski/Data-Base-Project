@@ -5,8 +5,9 @@ if (typeof localStorage === "undefined" || localStorage === null) {
     localStorage = new LocalStorage('./info');
 }
 /* GET users listing. */
-router.get('/', function (req, res, next) {
-    res.send('respond with a resource');
+router.get('/', function(req, res, next) {
+    let userType = localStorage.getItem('userType');
+    res.render('add',{userType})
 });
 
 module.exports = router;
