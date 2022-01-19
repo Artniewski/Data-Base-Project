@@ -59,7 +59,7 @@ $$
 drop procedure if exists add_customer;
 create procedure add_customer(IN n varchar(50), ln varchar(50), pn int, em varchar(50), out c_id int)
 begin
-    insert into Customers (name, lastname, phone_number, email) value (n, ln, pn, em);
+    insert ignore into Customers (name, lastname, phone_number, email) value (n, ln, pn, em);
     select ID into c_id from customers where (name, lastname, phone_number, email) = (n, ln, pn, em);
 end;
 $$
@@ -131,21 +131,16 @@ drop procedure if exists add_order;
 create procedure add_order(IN c_name varchar(50), c_lastname varchar(50),
                            c_phone int unsigned, c_email varchar(50),
                            mID int unsigned, sID int unsigned, uID int unsigned,
-                           car_color varchar(20))
+                           car_color varchar(20), d date)
 begin
-    declare clientID int;
     declare carAmount int;
     start transaction;
-    call add_customer(c_name, c_lastname, c_phone, c_email, clientID);
-    #     SELECT `AUTO_INCREMENT` into clientID
-#     FROM  INFORMATION_SCHEMA.TABLES
-#     WHERE TABLE_SCHEMA = 'speedygad'
-#     AND   TABLE_NAME   = 'customers';
+    call add_customer(c_name, c_lastname, c_phone, c_email, @clID);
 
     set carAmount = (select quantity from Cars_in_stores where (modelID, storeID, color) = (mID, sID, car_color));
     if carAmount > 0 then
         insert into Orders (customerID, modelID, storeID, userID, color, date, status)
-            value (clientID, mID, sID, uID, car_color, current_date, 'pending');
+            value (@clID, mID, sID, uID, car_color, d, 'pending');
 
         update Cars_in_stores set quantity = quantity - 1 where (modelID, storeID, color) = (mID, sID, car_color);
     else
