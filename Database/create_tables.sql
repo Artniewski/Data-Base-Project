@@ -5,7 +5,7 @@ use `SpeedyGad`;
 create table Users
 (
     ID       int unsigned auto_increment primary key,
-    login    varchar(50)  not null,
+    login    varchar(50)  not null unique,
     password varchar(100) not null,
     type     enum ('worker', 'manager', 'admin'),
     name     varchar(50)  not null,
