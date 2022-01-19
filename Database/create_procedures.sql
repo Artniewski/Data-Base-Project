@@ -71,7 +71,7 @@ $$
 drop procedure if exists add_brand;
 create procedure add_brand(IN n varchar(50), c varchar(50), out b_id int)
 begin
-    insert into Brands (name, country) value (n, c);
+    insert ignore into Brands (name, country) value (n, c);
     select ID into b_id from brands where (name, country) = (n, c);
 end;
 $$
@@ -107,10 +107,11 @@ DELIMITER ;
 DELIMITER $$
 drop procedure if exists add_car_model;
 create procedure add_car_model(IN brand_name varchar(50), brand_country varchar(50), car_name varchar(50),
-                               car_price float, car_max_speed decimal(5, 2), out b_ID int, m_ID int)
+                               car_price float, car_max_speed decimal(5, 2), out b_ID int, out m_ID int)
 begin
+
     call add_brand(brand_name, brand_country, b_ID);
-    insert into Models (brandID, name, price, max_speed)
+    insert ignore into Models (brandID, name, price, max_speed)
         value (b_ID, car_name, car_price, car_max_speed);
     select ID
     into m_ID
@@ -163,19 +164,18 @@ create procedure add_car_to_store(IN brand_name varchar(50), brand_country varch
                                   store_ID int unsigned, qty int unsigned,
                                   car_color varchar(15))
 begin
-    declare model_ID int unsigned;
-    declare brand_ID int unsigned;
     start transaction;
     if exists(select ID from Stores where ID = store_ID) then
-        call add_car_model(brand_name, brand_country, car_name, car_price, car_max_speed, brand_ID, model_ID);
+        call add_car_model(brand_name, brand_country, car_name, car_price, car_max_speed, @bID, @moID);
+        # select @bID, @moID; # Tutaj model_ID = null
         if exists(select modelID, storeID, color
                   from Cars_in_stores
-                  where (modelID, storeID, color) = (modelID, store_ID, car_color)) then
+                  where (modelID, storeID, color) = (@moID, store_ID, car_color)) then
             update Cars_in_stores
             set quantity = quantity + qty
-            where (modelID, storeID, color) = (modelID, store_ID, car_color);
+            where (modelID, storeID, color) = (@moID, store_ID, car_color);
         else
-            insert into Cars_in_stores (modelID, storeID, quantity, color) value (modelID, store_ID, qty, car_color);
+            insert into Cars_in_stores (modelID, storeID, quantity, color) value (@moID, store_ID, qty, car_color);
         end if;
 
     else
