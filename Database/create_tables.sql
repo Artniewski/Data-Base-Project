@@ -34,7 +34,7 @@ create table Models
     brandID   int unsigned,
     name      varchar(50) not null,
     price     float unsigned,
-    max_speed dec(3, 2) unsigned,
+    max_speed dec(5, 2) unsigned,
     foreign key (brandID) references Brands (ID),
     check ( max_speed > 0 ),
     check ( price > 0 )
