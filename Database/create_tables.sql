@@ -60,7 +60,7 @@ create table Cars_in_stores
     primary key (modelID, storeID),
     foreign key (modelID) references Models (ID),
     foreign key (storeID) references Stores (ID),
-    check ( quantity > 0 )
+    check ( quantity >= 0 )
 );
 
 create table Orders

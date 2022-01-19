@@ -42,10 +42,10 @@ begin
            (17, 'e-208', 124900.00, 150.00),
            (18, 'Arkana', 113900.00, 205.00);
     insert into Stores (city, street, number, zip_code, phone_number)
-    values ('Wrocław', 'Jagiellońska', '12a', '50-523', 345223234),
-           ('Warszawa', 'Kacza', '54', '34-863', 574934057),
-           ('Poznań', 'Krucza', '645d', '12-384', 206535723),
-           ('Warszawa', 'Wiejska', '4', '00-902', 226941426);
+    values ('Wrocław', 'Jagiellońska', '12a', '50523', 345223234),
+           ('Warszawa', 'Kacza', '54', '34863', 574934057),
+           ('Poznań', 'Krucza', '645d', '12384', 206535723),
+           ('Warszawa', 'Wiejska', '4', '00902', 226941426);
 
 end;
 $$
