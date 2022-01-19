@@ -25,14 +25,14 @@ create table Customers
 create table Brands
 (
     ID      int unsigned auto_increment primary key,
-    name    varchar(50) not null,
+    name    varchar(50) not null unique,
     country varchar(50) not null
 );
 create table Models
 (
     ID        int unsigned auto_increment primary key,
     brandID   int unsigned,
-    name      varchar(50) not null,
+    name      varchar(50) not null unique,
     price     float unsigned,
     max_speed dec(5, 2) unsigned,
     foreign key (brandID) references Brands (ID),
