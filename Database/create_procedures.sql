@@ -57,9 +57,10 @@ DELIMITER ;
 DELIMITER
 $$
 drop procedure if exists add_customer;
-create procedure add_customer(IN n varchar(50), ln varchar(50), pn int, em varchar(50))
+create procedure add_customer(IN n varchar(50), ln varchar(50), pn int, em varchar(50), out c_id int)
 begin
-    insert ignore into Customers (name, lastname, phone_number, email) value (n, ln, pn, em);
+    insert into Customers (name, lastname, phone_number, email) value (n, ln, pn, em);
+    select ID into c_id from customers where (name, lastname, phone_number, email) = (n, ln, pn, em);
 end;
 $$
 DELIMITER ;
@@ -68,9 +69,10 @@ DELIMITER ;
 DELIMITER
 $$
 drop procedure if exists add_brand;
-create procedure add_brand(IN n varchar(50), c varchar(50))
+create procedure add_brand(IN n varchar(50), c varchar(50), out b_id int)
 begin
-    insert ignore into Brands (name, country) value (n, c);
+    insert into Brands (name, country) value (n, c);
+    select ID into b_id from brands where (name, country) = (n, c);
 end;
 $$
 DELIMITER ;
@@ -80,9 +82,10 @@ DELIMITER
 $$
 drop procedure if exists add_user;
 create procedure add_user(IN log varchar(50), pas varchar(100), t enum ('worker', 'manager', 'admin'), n varchar(50),
-                          ln varchar(50), g enum ('K', 'M'))
+                          ln varchar(50), g enum ('K', 'M'), out u_id int)
 begin
-    insert ignore into Users (login, password, type, name, lastname, gender) value (log, pas, t, n, ln, g);
+    insert into Users (login, password, type, name, lastname, gender) value (log, pas, t, n, ln, g);
+    select ID into u_id from users where (login, password, type, name, lastname, gender) = (log, pas, t, n, ln, g);
 end;
 $$
 DELIMITER ;
@@ -91,10 +94,11 @@ DELIMITER ;
 DELIMITER
 $$
 drop procedure if exists add_store;
-create procedure add_store(IN c varchar(50), s varchar(50), n varchar(4), zc varchar(5), p int unsigned)
+create procedure add_store(IN c varchar(50), s varchar(50), n varchar(4), zc varchar(5), p int unsigned, out s_id int)
 begin
-    insert ignore into Stores (city, street, number, zip_code, phone_number)
+    insert into Stores (city, street, number, zip_code, phone_number)
     values (c, s, n, zc, p);
+    select ID into s_id from Stores where (city, street, number, zip_code, phone_number) = (c, s, n, zc, p);
 end;
 $$
 DELIMITER ;
@@ -103,13 +107,15 @@ DELIMITER ;
 DELIMITER $$
 drop procedure if exists add_car_model;
 create procedure add_car_model(IN brand_name varchar(50), brand_country varchar(50), car_name varchar(50),
-                               car_price float, car_max_speed decimal(5, 2))
+                               car_price float, car_max_speed decimal(5, 2), out b_ID int, m_ID int)
 begin
-    call add_brand(brand_name, brand_country);
-
-    insert ignore into Models (brandID, name, price, max_speed)
-        value ((select ID from brands where (name, country) = (brand_name, brand_country)),
-               car_name, car_price, car_max_speed);
+    call add_brand(brand_name, brand_country, b_ID);
+    insert into Models (brandID, name, price, max_speed)
+        value (b_ID, car_name, car_price, car_max_speed);
+    select ID
+    into m_ID
+    from models
+    where (brandID, name, price, max_speed) = (b_ID, car_name, car_price, car_max_speed);
 end;
 $$
 DELIMITER ;
@@ -124,22 +130,21 @@ drop procedure if exists add_order;
 create procedure add_order(IN c_name varchar(50), c_lastname varchar(50),
                            c_phone int unsigned, c_email varchar(50),
                            mID int unsigned, sID int unsigned, uID int unsigned,
-                           car_color varchar(20), d date)
+                           car_color varchar(20))
 begin
     declare clientID int;
     declare carAmount int;
     start transaction;
-    insert ignore into Customers (name, lastname, phone_number, email)
-    values (c_name, c_lastname, c_phone, c_email);
-
-    set clientID = (select clientID
-                    from Customers
-                    where ((name, lastname, phone_number, email) = (c_name, c_lastname, c_phone, c_email)));
+    call add_customer(c_name, c_lastname, c_phone, c_email, clientID);
+    #     SELECT `AUTO_INCREMENT` into clientID
+#     FROM  INFORMATION_SCHEMA.TABLES
+#     WHERE TABLE_SCHEMA = 'speedygad'
+#     AND   TABLE_NAME   = 'customers';
 
     set carAmount = (select quantity from Cars_in_stores where (modelID, storeID, color) = (mID, sID, car_color));
     if carAmount > 0 then
         insert into Orders (customerID, modelID, storeID, userID, color, date, status)
-            value (clientID, mID, sID, uID, car_color, d, 'pending');
+            value (clientID, mID, sID, uID, car_color, current_date, 'pending');
 
         update Cars_in_stores set quantity = quantity - 1 where (modelID, storeID, color) = (mID, sID, car_color);
     else
@@ -158,25 +163,19 @@ create procedure add_car_to_store(IN brand_name varchar(50), brand_country varch
                                   store_ID int unsigned, qty int unsigned,
                                   car_color varchar(15))
 begin
-    declare brand_ID int unsigned;
     declare model_ID int unsigned;
+    declare brand_ID int unsigned;
     start transaction;
     if exists(select ID from Stores where ID = store_ID) then
-        call add_car_model(brand_name, brand_country, car_name, car_price, car_max_speed);
-        set brand_ID = (select ID
-                        from Brands
-                        where (brand_name, brand_country) = (name, country));
-        set model_ID = (select ID
-                        from Models
-                        where (brandID, name, price, max_speed) = (brand_ID, car_name, car_price, car_max_speed));
+        call add_car_model(brand_name, brand_country, car_name, car_price, car_max_speed, brand_ID, model_ID);
         if exists(select modelID, storeID, color
                   from Cars_in_stores
-                  where (modelID, storeID, color) = (model_ID, store_ID, car_color)) then
+                  where (modelID, storeID, color) = (modelID, store_ID, car_color)) then
             update Cars_in_stores
             set quantity = quantity + qty
-            where (modelID, storeID, color) = (model_ID, store_ID, car_color);
+            where (modelID, storeID, color) = (modelID, store_ID, car_color);
         else
-            insert into Cars_in_stores (modelID, storeID, quantity, color) value (model_ID, store_ID, car_color, qty);
+            insert into Cars_in_stores (modelID, storeID, quantity, color) value (modelID, store_ID, qty, car_color);
         end if;
 
     else
