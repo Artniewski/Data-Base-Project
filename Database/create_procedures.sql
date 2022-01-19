@@ -59,7 +59,7 @@ $$
 drop procedure if exists add_customer;
 create procedure add_customer(IN n varchar(50), ln varchar(50), pn int, em varchar(50))
 begin
-    insert into Customers (name, lastname, phone_number, email) value (n, ln, pn, em);
+    insert ignore into Customers (name, lastname, phone_number, email) value (n, ln, pn, em);
 end;
 $$
 DELIMITER ;
@@ -70,7 +70,7 @@ $$
 drop procedure if exists add_brand;
 create procedure add_brand(IN n varchar(50), c varchar(50))
 begin
-    insert into Brands (name, country) value (n, c);
+    insert ignore into Brands (name, country) value (n, c);
 end;
 $$
 DELIMITER ;
@@ -82,7 +82,7 @@ drop procedure if exists add_user;
 create procedure add_user(IN log varchar(50), pas varchar(100), t enum ('worker', 'manager', 'admin'), n varchar(50),
                           ln varchar(50), g enum ('K', 'M'))
 begin
-    insert into Users (login, password, type, name, lastname, gender) value (log, pas, t, n, ln, g);
+    insert ignore into Users (login, password, type, name, lastname, gender) value (log, pas, t, n, ln, g);
 end;
 $$
 DELIMITER ;
@@ -93,8 +93,23 @@ $$
 drop procedure if exists add_store;
 create procedure add_store(IN c varchar(50), s varchar(50), n varchar(4), zc varchar(5), p int unsigned)
 begin
-    insert into Stores (city, street, number, zip_code, phone_number)
+    insert ignore into Stores (city, street, number, zip_code, phone_number)
     values (c, s, n, zc, p);
+end;
+$$
+DELIMITER ;
+
+
+DELIMITER $$
+drop procedure if exists add_car_model;
+create procedure add_car_model(IN brand_name varchar(50), brand_country varchar(50), car_name varchar(50),
+                               car_price float, car_max_speed decimal(5, 2))
+begin
+    call add_brand(brand_name, brand_country);
+
+    insert ignore into Models (brandID, name, price, max_speed)
+        value ((select ID from brands where (name, country) = (brand_name, brand_country)),
+               car_name, car_price, car_max_speed);
 end;
 $$
 DELIMITER ;
@@ -127,6 +142,43 @@ begin
             value (clientID, mID, sID, uID, car_color, d, 'pending');
 
         update Cars_in_stores set quantity = quantity - 1 where (modelID, storeID, color) = (mID, sID, car_color);
+    else
+        rollback;
+    end if;
+    commit;
+end;
+$$
+DELIMITER ;
+
+
+DELIMITER $$
+drop procedure if exists add_car_to_store;
+create procedure add_car_to_store(IN brand_name varchar(50), brand_country varchar(50),
+                                  car_name varchar(50), car_price float unsigned, car_max_speed decimal(5, 2),
+                                  store_ID int unsigned, qty int unsigned,
+                                  car_color varchar(15))
+begin
+    declare brand_ID int unsigned;
+    declare model_ID int unsigned;
+    start transaction;
+    if exists(select ID from Stores where ID = store_ID) then
+        call add_car_model(brand_name, brand_country, car_name, car_price, car_max_speed);
+        set brand_ID = (select ID
+                        from Brands
+                        where (brand_name, brand_country) = (name, country));
+        set model_ID = (select ID
+                        from Models
+                        where (brandID, name, price, max_speed) = (brand_ID, car_name, car_price, car_max_speed));
+        if exists(select modelID, storeID, color
+                  from Cars_in_stores
+                  where (modelID, storeID, color) = (model_ID, store_ID, car_color)) then
+            update Cars_in_stores
+            set quantity = quantity + qty
+            where (modelID, storeID, color) = (model_ID, store_ID, car_color);
+        else
+            insert into Cars_in_stores (modelID, storeID, quantity, color) value (model_ID, store_ID, car_color, qty);
+        end if;
+
     else
         rollback;
     end if;
