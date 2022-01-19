@@ -18,20 +18,13 @@ function isLoggedIn(req, res, next) {
 
 /* GET home page. */
 router.get('/', isLoggedIn, function (req, res, next) {
-    let type = localStorage.getItem("accountType")
-    res.render('index', {title: type})
-    // switch (type) {
-    //     case "admin":
-    //         res.render('index', {title: 'admin'});
-    //         break;
-    //     case "user":
-    //         res.render('index', {title: 'user'})
-    //         break;
-    //     case "manager":
-    //         res.render('index', {title: 'manager'})
-    //         break;
-    //
-    //}
+    let type = localStorage.getItem("type")
+    if (type === "worker") {
+        res.redirect('/worker-panel');
+    } else {
+        console.log(type);
+        res.render('index', {type})
+    }
 });
 
 router.get('/login', ((req, res) => {
@@ -47,7 +40,7 @@ router.post('/login', (req, res) => {
         function (err, results, fields) {
             if (bcrypt.compare(password, results[0].password)) {
                 localStorage.setItem("isLoggedIn", "true");
-                localStorage.setItem("accountType", results[0].type)
+                localStorage.setItem("type", results[0].type)
                 res.redirect('/');
 
             } else {
@@ -58,11 +51,6 @@ router.post('/login', (req, res) => {
             // which will save query preparation time and give better performance
         }
     );
-    // if (queryResult[0].login === login && queryResult[0].password === password) {
-    //     res.redirect('/');
-    // } else {
-    //     res.redirect('/login')
-    // }
 
 })
 

@@ -68,9 +68,10 @@ DELIMITER ;
 DELIMITER
 $$
 drop procedure if exists add_brand;
-create procedure add_brand(IN n varchar(50), c varchar(50))
+create procedure add_brand(IN n varchar(50), c varchar(50), OUT b int)
 begin
     insert ignore into Brands (name, country) value (n, c);
+    SET b = 1;
 end;
 $$
 DELIMITER ;

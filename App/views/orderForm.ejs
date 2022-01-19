@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home Page</title>
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&amp;display=swap">
+    <link rel="stylesheet" href="/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/styles.min.css">
+    <link href="/css/navbar-top-fixed.css" rel="stylesheet">
+
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand text-danger" href="/" >SpeedyGad</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/worker-panel">Home</a>
+                </li>
+            </ul>
+            <form class="d-flex" action="/login" method="get">
+                <button class="btn btn-outline-success" type="submit">Log out</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<form class="container w-75" action="/worker-panel/orders" method="post">
+    <div class="mb-3">
+        <label for="customer_name" class="form-label">Customer name</label>
+        <input type="text" class="form-control" id="customer_name" name="customer_name" placeholder="Robert"
+               required>
+    </div>
+    <div class="mb-3">
+        <label for="customer_lastname" class="form-label">Customer lastname</label>
+        <input type="text" class="form-control" id="customer_lastname" name="customer_lastname"
+               placeholder="Makłowicz" required>
+    </div>
+    <div class="mb-3">
+        <label for="customer_phone" class="form-label">Customer phone</label>
+        <input type="tel" pattern="[0-9]{9}" class="form-control" id="customer_phone" name="customer_phone"
+               placeholder="699799899" required>
+    </div>
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Customer Email address</label>
+        <input type="email" class="form-control" id="exampleFormControlInput1" name="customer_email"
+               placeholder="name@example.com" required>
+    </div>
+    <div class="mb-3">
+        <label for="modelID" class="form-label">Car model ID</label>
+        <input type="number" class="form-control" id="modelID" name="modelID"
+               placeholder="car model ID" required>
+    </div>
+    <div class="mb-3">
+        <label for="storeID" class="form-label">Store ID</label>
+        <input type="number" class="form-control" id="storeID" name="storeID"
+               placeholder="Store ID" required>
+    </div>
+    <div class="mb-3">
+        <label for="userID" class="form-label">User ID</label>
+        <input type="number" class="form-control" id="userID" name="userID"
+               placeholder="User ID" required>
+    </div>
+    <div class="mb-3">
+        <label for="car_color" class="form-label">Car color</label>
+        <input type="text" class="form-control" id="car_color" name="car_color"
+               placeholder="car_color" required>
+    </div>
+    <div class="mb-3">
+        <label for="date" class="form-label">Date</label>
+        <input type="date" class="form-control" id="date" name="date"
+               placeholder="date" required>
+    </div>
+    <button type="submit" class="w-100 btn btn-lg btn-outline-primary">Create Order</button>
+</form>
+
+
+</body>
+</html>

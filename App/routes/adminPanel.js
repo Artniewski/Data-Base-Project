@@ -11,7 +11,7 @@ if (typeof localStorage === "undefined" || localStorage === null) {
 
 function isLoggedInAdmin(req, res, next) {
     if (localStorage.getItem("isLoggedIn")
-        && localStorage.getItem("accountType") === "manager") {
+        && localStorage.getItem("accountType") === "admin") {
         next();
     } else {
         res.redirect('/login');

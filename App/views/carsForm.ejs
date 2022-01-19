@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Worker Panel</title>
+    <title>Home Page</title>
     <link rel='stylesheet' href='/stylesheets/style.css'/>
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&amp;display=swap">
@@ -23,7 +23,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/worker-panel">Home</a>
+                    <a class="nav-link active" aria-current="page" href="/manager-panel">Home</a>
                 </li>
             </ul>
             <form class="d-flex" action="/login" method="get">
@@ -32,32 +32,37 @@
         </div>
     </div>
 </nav>
-<div class="container w-50 ">
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Show list of Orders</h5>
-        <a href="/worker-panel/orders" class="btn btn-primary">Go to the List </a>
+
+<form class="container w-50" action="/manager-panel/cars" method="post">
+    <div class="mb-3">
+        <label for="name" class="form-label">Brand name</label>
+        <input type="text" class="form-control" id="name" name="name" placeholder="Opel"
+               required>
     </div>
-</div>
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Add new Order</h5>
-        <a href="/worker-panel/orders/new" class="btn btn-primary">Go to Order form </a>
+    <div class="mb-3">
+        <label for="country" class="form-label">Brand country</label>
+        <input type="text" class="form-control" id="country" name="country"
+               placeholder="Germany" required>
     </div>
-</div>
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Show list of Clients</h5>
-        <a href="/worker-panel/clients" class="btn btn-primary">Go to the List </a>
+    <div class="mb-3">
+        <label for="car_name" class="form-label">Model Name</label>
+        <input type="text" class="form-control" id="car_name" name="car_name"
+               placeholder="Astra" required>
     </div>
-</div>
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Show list of available Cars</h5>
-        <a href="/worker-panel/cars" class="btn btn-primary">Go to the List </a>
+    <div class="mb-3">
+        <label for="car_price" class="form-label">Model Price</label>
+        <input type="number" class="form-control" id="car_price" name="car_price"
+               placeholder="45300" required>
     </div>
-</div>
-</div>
+    <div class="mb-3">
+        <label for="car_max_speed" class="form-label">Car Max Speed (km/h)</label>
+        <input type="number" class="form-control" id="car_max_speed" name="car_max_speed"
+               placeholder="230" required>
+    </div>
+
+    <button type="submit" class="w-100 btn btn-lg btn-outline-primary">Add to List of Car Models</button>
+</form>
+
 
 </body>
 </html>

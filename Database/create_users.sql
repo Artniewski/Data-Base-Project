@@ -19,6 +19,7 @@ GRANT SELECT,INSERT ON Orders TO worker;
 GRANT SELECT ON cars_in_stores TO worker;
 GRANT SELECT ON Models TO worker;
 GRANT SELECT ON Brands TO worker;
+GRANT SELECT ON Stores TO worker;
 
 GRANT EXECUTE ON PROCEDURE add_customer TO worker;
 GRANT EXECUTE ON PROCEDURE add_order TO worker;

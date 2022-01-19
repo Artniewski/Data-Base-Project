@@ -15,7 +15,7 @@
 <body>
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand text-danger" href="/">SpeedyGad</a>
+        <a class="navbar-brand text-danger" href="/" >SpeedyGad</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -23,7 +23,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    <a class="nav-link active" aria-current="page" href="/manager-panel">Home</a>
                 </li>
             </ul>
             <form class="d-flex" action="/login" method="get">
@@ -33,6 +33,20 @@
     </div>
 </nav>
 
+<form class="container w-50" action="/manager-panel/brands" method="post">
+    <div class="mb-3">
+        <label for="name" class="form-label">Brand name</label>
+        <input type="text" class="form-control" id="name" name="name" placeholder="Robert"
+               required>
+    </div>
+    <div class="mb-3">
+        <label for="country" class="form-label">Brand country</label>
+        <input type="text" class="form-control" id="country" name="country"
+               placeholder="Makłowicz" required>
+    </div>
+
+    <button type="submit" class="w-100 btn btn-lg btn-outline-primary">Add to List of Brands</button>
+</form>
 
 
 </body>

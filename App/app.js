@@ -24,9 +24,8 @@ app.use(express.static(path.join(__dirname, 'assets')));
 
 app.use('/', indexRouter);
 app.use('/worker-panel', workerRouter);
-//app.use('/manager-panel', managerRouter);
-//app.use('/admin-panel', adminRouter);
-//app.use('/add', addRouter);
+app.use('/manager-panel', managerRouter);
+app.use('/admin-panel', adminRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

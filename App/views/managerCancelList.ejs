@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Home Page</title>
+    <title>Worker List</title>
     <link rel='stylesheet' href='/stylesheets/style.css'/>
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&amp;display=swap">
@@ -23,7 +23,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    <a class="nav-link active" aria-current="page" href="/worker-panel">Home</a>
                 </li>
             </ul>
             <form class="d-flex" action="/login" method="get">
@@ -32,8 +32,29 @@
         </div>
     </div>
 </nav>
-
-
-
+<div class="container">
+    <div class="row bg-danger bg-opacity-50 rounded">
+        <% results[0] && Object.keys(results[0]).forEach( function(key) { %>
+            <div class="col-sm">
+                <%= key %>
+            </div>
+        <% }) %>
+    </div>
+    <% results.forEach( function(my_row) { %>
+        <div class="row">
+            <% Object.keys(my_row).forEach( function(key){ %>
+                <div class="col-sm text-start">
+                    <div><%= my_row[key] %>
+                    </div>
+                </div>
+            <% }) %>
+            <form action="/cancel-order" method="post">
+                <button type="sumbit" class="w-100 btn btn-lg btn-outline-primary"
+                        name="ID" value=`<%= my_row.ID %>`>Go to panel
+                </button>
+            </form>
+        </div>
+    <% }) %>
+</div>
 </body>
 </html>

@@ -1,25 +1,63 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Add Panel</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Manager Panel</title>
     <link rel='stylesheet' href='/stylesheets/style.css'/>
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&amp;display=swap">
     <link rel="stylesheet" href="/fonts/font-awesome.min.css">
     <link rel="stylesheet" href="/css/styles.min.css">
+    <link href="/css/navbar-top-fixed.css" rel="stylesheet">
+
 </head>
 <body>
-<h1>You are <%= userType %> </h1>
-<p>Welcome to Worker panel</p>
-<ul>
-    <li><a href="">Dodaj Model Samochodu</a></li>
-    <li><a href="">Dodaj Markę Samochodu</a></li>
-    <li><a href="">Dodaj Salon Samochodowy</a></li>
-    <li><a href="">Dodaj Klienta</a></li>
-    <li><a href="">Dodaj Zlecenie</a></li>
-    <li><a href="">Dodaj Samochód do Salonu</a></li>
-</ul>
-<input class="form-control input100" type="text" name="login" placeholder="Login">
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand text-danger" href="/" >SpeedyGad</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/manager-panel">Home</a>
+                </li>
+            </ul>
+            <form class="d-flex" action="/login" method="get">
+                <button class="btn btn-outline-success" type="submit">Log out</button>
+            </form>
+        </div>
+    </div>
+</nav>
+<div class="container w-50 ">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Show list of Orders</h5>
+            <a href="/worker-panel/orders" class="btn btn-primary">Go to the List </a>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Add new Order</h5>
+            <a href="/worker-panel/orders/new" class="btn btn-primary">Go to Order form </a>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Show list of Clients</h5>
+            <a href="/worker-panel/clients" class="btn btn-primary">Go to the List </a>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Show list of available Cars</h5>
+            <a href="/worker-panel/cars" class="btn btn-primary">Go to the List </a>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
-<!--TODO: kox-->
