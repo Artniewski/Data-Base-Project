@@ -57,7 +57,7 @@ create table Cars_in_stores
     storeID  int unsigned,
     quantity int unsigned,
     color    varchar(20) not null,
-    primary key (modelID, storeID),
+    primary key (modelID, storeID, color),
     foreign key (modelID) references Models (ID),
     foreign key (storeID) references Stores (ID),
     check ( quantity >= 0 )

@@ -1,5 +1,7 @@
-use `speedygad`;
-DELIMITER $$
+use
+    `speedygad`;
+DELIMITER
+$$
 drop procedure if exists sample_data_generator;
 create procedure sample_data_generator()
 begin
@@ -52,7 +54,8 @@ $$
 DELIMITER ;
 
 
-DELIMITER $$
+DELIMITER
+$$
 drop procedure if exists add_customer;
 create procedure add_customer(IN n varchar(50), ln varchar(50), pn int, em varchar(50))
 begin
@@ -62,7 +65,8 @@ $$
 DELIMITER ;
 
 
-DELIMITER $$
+DELIMITER
+$$
 drop procedure if exists add_brand;
 create procedure add_brand(IN n varchar(50), c varchar(50))
 begin
@@ -72,7 +76,8 @@ $$
 DELIMITER ;
 
 
-DELIMITER $$
+DELIMITER
+$$
 drop procedure if exists add_user;
 create procedure add_user(IN log varchar(50), pas varchar(100), t enum ('worker', 'manager', 'admin'), n varchar(50),
                           ln varchar(50), g enum ('K', 'M'))
@@ -83,11 +88,49 @@ $$
 DELIMITER ;
 
 
-DELIMITER $$
+DELIMITER
+$$
 drop procedure if exists add_store;
 create procedure add_store(IN c varchar(50), s varchar(50), n varchar(4), zc varchar(5), p int unsigned)
 begin
-    insert into Stores (city, street, number, zip_code, phone_number) values (c, s, n, zc, p);
+    insert into Stores (city, street, number, zip_code, phone_number)
+    values (c, s, n, zc, p);
+end;
+$$
+DELIMITER ;
+
+
+-- Dodanie zlecenia - add_order(customer_name, customer_lastname,
+-- customer_phone_number, customer_email, modelID, storeID, userID, car_color, date, status)
+-- TODO: zmiana w sprawozdaniu usunac trigger i w add_order zmiana argumentow ( status)
+DELIMITER
+$$
+drop procedure if exists add_order;
+create procedure add_order(IN c_name varchar(50), c_lastname varchar(50),
+                           c_phone int unsigned, c_email varchar(50),
+                           mID int unsigned, sID int unsigned, uID int unsigned,
+                           car_color varchar(20), d date)
+begin
+    declare clientID int;
+    declare carAmount int;
+    start transaction;
+    insert ignore into Customers (name, lastname, phone_number, email)
+    values (c_name, c_lastname, c_phone, c_email);
+
+    set clientID = (select clientID
+                    from Customers
+                    where ((name, lastname, phone_number, email) = (c_name, c_lastname, c_phone, c_email)));
+
+    set carAmount = (select quantity from Cars_in_stores where (modelID, storeID, color) = (mID, sID, car_color));
+    if carAmount > 0 then
+        insert into Orders (customerID, modelID, storeID, userID, color, date, status)
+            value (clientID, mID, sID, uID, car_color, d, 'pending');
+
+        update Cars_in_stores set quantity = quantity - 1 where (modelID, storeID, color) = (mID, sID, car_color);
+    else
+        rollback;
+    end if;
+    commit;
 end;
 $$
 DELIMITER ;
