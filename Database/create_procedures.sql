@@ -70,3 +70,24 @@ begin
 end;
 $$
 DELIMITER ;
+
+
+DELIMITER $$
+drop procedure if exists add_user;
+create procedure add_user(IN log varchar(50), pas varchar(100), t enum ('worker', 'manager', 'admin'), n varchar(50),
+                          ln varchar(50), g enum ('K', 'M'))
+begin
+    insert into Users (login, password, type, name, lastname, gender) value (log, pas, t, n, ln, g);
+end;
+$$
+DELIMITER ;
+
+
+DELIMITER $$
+drop procedure if exists add_store;
+create procedure add_store(IN c varchar(50), s varchar(50), n varchar(4), zc varchar(5), p int unsigned)
+begin
+    insert into Stores (city, street, number, zip_code, phone_number) values (c, s, n, zc, p);
+end;
+$$
+DELIMITER ;
