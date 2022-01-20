@@ -38,7 +38,7 @@ router.post('/login', (req, res) => {
         'SELECT password,type FROM `Users` WHERE `login` = ?',
         [login],
         function (err, results, fields) {
-            if (bcrypt.compare(password, results[0].password)) {
+            if (results[0] && bcrypt.compare(password, results[0].password)) {
                 localStorage.setItem("isLoggedIn", "true");
                 localStorage.setItem("type", results[0].type)
                 res.redirect('/');

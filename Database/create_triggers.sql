@@ -1,4 +1,4 @@
-USE `SpeedyGad`;
+USE `Speedygad`;
 
 # delimiter //
 # DROP TRIGGER IF EXISTS remove_cars_from_stores_if_0_left;

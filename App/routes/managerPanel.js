@@ -55,7 +55,7 @@ router.post('/cars', isLoggedInManager, ((req, res) => {
     );
 }))
 
-router.get('/car-to-stores/new', isLoggedInManager, (((req, res) => {
+router.get('/cars-to-stores/new', isLoggedInManager, (((req, res) => {
     res.render('ctsForm');
 })))
 
@@ -70,21 +70,20 @@ router.post('/cars-to-stores', isLoggedInManager, (req, res) => {
 })
 
 router.get('/cancel-order', isLoggedInManager, (req, res) => {
-    managerPool.query('select o.ID, c.name, c.lastname, c.phone_number, b.name as brand, m.name as model, m.price, color,userID as By, date, status ' +
-        'from orders as o ' +
-        'join customer as c on c.ID = o.customerID ' +
-        'join models as m on m.ID = modelID ' +
-        'join brands as b on b.ID = m.brandID;', function (err, results, fields) {
-        console.log(err);
-        res.render('managerCancelList',{results})
-    })
+    managerPool.query('select o.ID, c.name, c.lastname, c.phone_number as number, b.name as brand, m.name as model, m.price, color,userID as Worker , DATE_FORMAT(o.date,\'%d/%m/%Y\') as Datee, status from Orders as o join Customers as c on c.ID = o.customerID join Models as m on m.ID = modelID join Brands as b on b.ID = m.brandID;',
+        function (err, results, fields) {
+            console.log(err);
+            res.render('managerCancelList', {results})
+        })
 })
 
 router.post('/cancel-order', isLoggedInManager, (req, res) => {
     const {ID} = req.body;
-managerPool.query('update orders\n' +
-    'set status = \'cancelled\'\n' +
-    'where ID = ?',[ID])
+    managerPool.query('update orders' +
+        ' set status = \'cancelled\' ' +
+        'where ID = ?', [ID], function (err, results, fields) {
+        res.redirect('/manager-panel');
+    })
 })
 
 module.exports = router;

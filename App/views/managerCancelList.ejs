@@ -39,6 +39,9 @@
                 <%= key %>
             </div>
         <% }) %>
+            <div class="col-sm">
+                cancel
+            </div>
     </div>
     <% results.forEach( function(my_row) { %>
         <div class="row">
@@ -48,11 +51,13 @@
                     </div>
                 </div>
             <% }) %>
-            <form action="/cancel-order" method="post">
-                <button type="sumbit" class="w-100 btn btn-lg btn-outline-primary"
-                        name="ID" value=`<%= my_row.ID %>`>Go to panel
-                </button>
-            </form>
+            <div class="col-sm text-start">
+                <form action="/manager-panel/cancel-order" method="post">
+                    <button type="sumbit" class="w-100 btn btn-lg btn-outline-primary"
+                            name="ID" value=<%= my_row.ID %>>Cancel
+                    </button>
+                </form>
+            </div>
         </div>
     <% }) %>
 </div>
