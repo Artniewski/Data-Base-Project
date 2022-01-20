@@ -42,9 +42,29 @@ GRANT EXECUTE ON PROCEDURE add_store TO admin;
 GRANT worker TO manager;
 GRANT manager TO admin;
 
+
+
+GRANT SELECT,INSERT ON Speedygad.Customers TO  'manager';
+GRANT SELECT,INSERT ON Orders TO  'manager';
+GRANT SELECT ON cars_in_stores TO  'manager';
+GRANT SELECT ON Models TO  'manager';
+GRANT SELECT ON Brands TO  'manager';
+GRANT SELECT ON Stores TO  'manager';
+
+GRANT EXECUTE ON PROCEDURE add_customer TO  'manager';
+GRANT EXECUTE ON PROCEDURE add_order TO  'manager';
+
+GRANT ALL PRIVILEGES ON Speedygad.* TO admin;
+
 GRANT 'manager' TO 'manager'@'localhost';
 GRANT 'worker' TO 'worker'@'localhost';
 GRANT 'admin' TO 'admin'@'localhost';
+
+SHOW GRANTS FOR 'admin'
+
+
+
+
 
 
 

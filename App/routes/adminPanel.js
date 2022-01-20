@@ -1,7 +1,7 @@
 const express = require('express');
 const {LocalStorage} = require("node-localstorage");
 const router = express.Router();
-const {adminPool} = require('../connection')
+const {adminPool, managerPool} = require('../connection')
 const bcrypt = require("bcrypt");
 if (typeof localStorage === "undefined" || localStorage === null) {
     const LocalStorage = require('node-localstorage').LocalStorage;
@@ -11,7 +11,7 @@ if (typeof localStorage === "undefined" || localStorage === null) {
 
 function isLoggedInAdmin(req, res, next) {
     if (localStorage.getItem("isLoggedIn")
-        && localStorage.getItem("accountType") === "admin") {
+        && localStorage.getItem("type") === "admin") {
         next();
     } else {
         res.redirect('/login');
@@ -20,41 +20,41 @@ function isLoggedInAdmin(req, res, next) {
 
 /* GET users listing. */
 router.get('/', isLoggedInAdmin, function (req, res, next) {
-    res.render('index');
+    res.render('admin');
 });
 
-router.post('/brands', isLoggedInAdmin, ((req, res) => {
+
+router.post('/shops', isLoggedInAdmin, ((req, res) => {
+    const {city, street, buildingNumber, zip_code, phone_number} = req.body;
     adminPool.query(
-        //TODO
-        'SELECT * FROM `Customer`',
+        'CALL add_store(?, ?, ?, ?, ?, @a)', [city, street, buildingNumber, zip_code, phone_number]
+        ,
         function (err, results, fields) {
-            res.render('index');
+            console.log(err)
+            res.redirect('/admin-panel')
         }
     );
 }))
+router.get('/shops/new', isLoggedInAdmin, (((req, res) => {
+    res.render('shopForm');
+})))
 
-router.post('/cars', isLoggedInAdmin, ((req, res) => {
+router.get('/users/new', (((req, res) => {
+    res.render('userForm');
+})))
+
+router.post('/users', (async (req, res) => {
+    let {login, password, type, name, lastname, gender} = req.body;
+    password = await bcrypt.hash(password, 10)
     adminPool.query(
         //TODO
-        'SELECT * FROM `Customer`',
+        'CALL add_user(?, ?, ?, ?, ?, ?, @a );',
+        [login, password, type, name, lastname, gender],
         function (err, results, fields) {
-            res.render('orders', {results});
+            console.log(err)
+            res.redirect('/admin-panel');
         }
     );
 }))
-
-router.post('/cars-to-stores', isLoggedInAdmin, (req, res) => {
-
-    res.redirect('/worker-panel/');
-})
-
-router.get('/cancel-order', isLoggedInAdmin, (req, res) => {
-//tak jak u workera
-
-})
-
-router.post('/cancel-order', isLoggedInAdmin, (req, res) => {
-
-})
 
 module.exports = router;

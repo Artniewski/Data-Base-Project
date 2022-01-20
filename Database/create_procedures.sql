@@ -111,15 +111,16 @@ create procedure add_car_model(IN brand_name varchar(50), brand_country varchar(
 begin
     start transaction ;
     if exists(select name from models where name = car_name) then
-        rollback ;
+        select ID, brandID into m_ID, b_ID from models where name = car_name;
     else
-        call add_brand(brand_name, brand_country, b_ID);
+        call add_brand(brand_name, brand_country, @bID);
+        SELECT @bID into b_ID;
         insert ignore into Models (brandID, name, price, max_speed)
-            value (b_ID, car_name, car_price, car_max_speed);
+            value (@bID, car_name, car_price, car_max_speed);
         select ID
         into m_ID
         from models
-        where (brandID, name, price, max_speed) = (b_ID, car_name, car_price, car_max_speed);
+        where (brandID, name, price, max_speed) = (@bID, car_name, car_price, car_max_speed);
         commit;
     end if;
 end;
@@ -166,7 +167,7 @@ begin
     start transaction;
     if exists(select ID from Stores where ID = store_ID) then
         call add_car_model(brand_name, brand_country, car_name, car_price, car_max_speed, @bID, @moID);
-        # select @bID, @moID; # Tutaj model_ID = null
+        select @bID, @moID; # Tutaj model_ID = null
         if exists(select modelID, storeID, color
                   from Cars_in_stores
                   where (modelID, storeID, color) = (@moID, store_ID, car_color)) then

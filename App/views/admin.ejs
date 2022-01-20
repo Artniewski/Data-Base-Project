@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Manager Panel</title>
+    <title>Admin Panel</title>
     <link rel='stylesheet' href='/stylesheets/style.css'/>
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&amp;display=swap">
@@ -15,7 +15,7 @@
 <body>
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand text-danger" href="/" >SpeedyGad</a>
+        <a class="navbar-brand text-danger" href="/">SpeedyGad</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
                 aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -23,7 +23,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/manager-panel">Home</a>
+                    <a class="nav-link active" aria-current="page" href="/admin-panel">Home</a>
                 </li>
             </ul>
             <form class="d-flex" action="/login" method="get">
@@ -35,26 +35,14 @@
 <div class="container w-50 ">
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">Add new Car Brand</h5>
-            <a href="/manager-panel/brands/new" class="btn btn-primary">Go to Brand Form </a>
+            <h5 class="card-title">Add new User</h5>
+            <a href="/admin-panel/users/new" class="btn btn-primary">Go to User Form </a>
         </div>
     </div>
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">Add new Car Model</h5>
-            <a href="/manager-panel/cars/new" class="btn btn-primary">Go to Car Model Form </a>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Add Car Models to Your Store</h5>
-            <a href="/manager-panel/cars-to-stores/new" class="btn btn-primary">Go to Car-to-Store Form </a>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Show list of Orders (Cancel)</h5>
-            <a href="/manager-panel/cancel-order" class="btn btn-primary">Go to the List </a>
+            <h5 class="card-title">Add new Shop</h5>
+            <a href="/admin-panel/shops/new" class="btn btn-primary">Go to Shop Form </a>
         </div>
     </div>
 </div>

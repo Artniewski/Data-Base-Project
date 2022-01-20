@@ -20,13 +20,11 @@ function isLoggedInManager(req, res, next) {
 
 /* GET users listing. */
 router.get('/', isLoggedInManager, function (req, res, next) {
-    const type = localStorage.getItem("type")
     res.render('manager');
 });
 
 router.post('/brands', isLoggedInManager, ((req, res) => {
     const {name, country} = req.body;
-    let dummy = 0;
     managerPool.query(
         'call add_brand(?, ?, @a);', [name, country],
         function (err, results, fields) {
@@ -44,12 +42,13 @@ router.get('/cars/new', isLoggedInManager, (((req, res) => {
 })))
 
 router.post('/cars', isLoggedInManager, ((req, res) => {
-    const {brand_name, brand_country, car_name, car_price, car_max_speed} = req.body;
+    const {name, country, car_name, car_price, car_max_speed} = req.body;
     managerPool.query(
         //TODO
-        'call add_car_model(?, ?, ?, ?, ?, @a, @b);',
-        [brand_name, brand_country, car_name, car_price, car_max_speed],
+        'call add_car_model(?, ?, ?, ?, ?, @x, @y );',
+        [name, country, car_name, car_price, car_max_speed],
         function (err, results, fields) {
+            console.log(err)
             res.redirect('/manager-panel');
         }
     );
@@ -61,9 +60,10 @@ router.get('/cars-to-stores/new', isLoggedInManager, (((req, res) => {
 
 router.post('/cars-to-stores', isLoggedInManager, (req, res) => {
     const {brand_name, brand_country, car_name, car_price, car_max_speed, store_ID, qty, car_color} = req.body;
-    managerPool.query('call add_car_to_store (?, ?, ?, ?, ?, ?, ?, ?);',
+    managerPool.query('call add_car_to_store(?, ?, ?, ?, ?, ?, ?, ?);',
         [brand_name, brand_country, car_name, car_price, car_max_speed, store_ID, qty, car_color],
         function (err, results, fields) {
+            console.log(err)
             res.redirect('/manager-panel');
         }
     )
@@ -82,6 +82,7 @@ router.post('/cancel-order', isLoggedInManager, (req, res) => {
     managerPool.query('update orders' +
         ' set status = \'cancelled\' ' +
         'where ID = ?', [ID], function (err, results, fields) {
+        console.log(err)
         res.redirect('/manager-panel');
     })
 })

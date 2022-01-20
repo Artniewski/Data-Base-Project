@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Shop Form</title>
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&amp;display=swap">
+    <link rel="stylesheet" href="/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/styles.min.css">
+    <link href="/css/navbar-top-fixed.css" rel="stylesheet">
+
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand text-danger" href="/">SpeedyGad</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/admin-panel">Home</a>
+                </li>
+            </ul>
+            <form class="d-flex" action="/login" method="get">
+                <button class="btn btn-outline-success" type="submit">Log out</button>
+            </form>
+        </div>
+    </div>
+</nav>
+<form class="container w-50" action="/admin-panel/users" method="post">
+    <div class="mb-3">
+        <label for="login" class="form-label">Login</label>
+        <input type="text" class="form-control" id="login" name="login" placeholder="new_user"
+               required>
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" name="password" placeholder="password"
+               required>
+    </div>
+    <div class="mb-3">
+        <label for="type" class="form-label">Account type</label>
+        <input type="text" pattern="admin|worker|manager" class="form-control" id="type" name="type" placeholder="admin/manager/worker"
+               required>
+    </div>
+    <div class="mb-3">
+        <label for="name" class="form-label">First Name</label>
+        <input type="text" class="form-control" id="name" name="name" placeholder="Kasia"
+               required>
+    </div>
+    <div class="mb-3">
+        <label for="lastname" class="form-label">Last Name</label>
+        <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Nowak"
+               required>
+    </div>
+    <div class="mb-3">
+        <label for="gender" class="form-label">Gender</label>
+        <input type="text" pattern="K|M" class="form-control" id="gender" name="gender"
+               placeholder="K/M" required>
+    </div>
+
+    <button type="submit" class="w-100 btn btn-lg btn-outline-primary">Add to List of Users</button>
+</form>
+
+
+</body>
+</html>
