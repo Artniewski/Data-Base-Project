@@ -39,11 +39,11 @@ router.get('/shops/new', isLoggedInAdmin, (((req, res) => {
     res.render('shopForm');
 })))
 
-router.get('/users/new', (((req, res) => {
+router.get('/users/new',isLoggedInAdmin, (((req, res) => {
     res.render('userForm');
 })))
 
-router.post('/users', (async (req, res) => {
+router.post('/users',isLoggedInAdmin, (async (req, res) => {
     let {login, password, type, name, lastname, gender} = req.body;
     password = await bcrypt.hash(password, 10)
     adminPool.query(
@@ -56,5 +56,11 @@ router.post('/users', (async (req, res) => {
         }
     );
 }))
+
+router.get('/users',isLoggedInAdmin, (req, res, next) => {
+    adminPool.query('SELECT ID, type, name, lastname, gender FROM Users', function (err, results) {
+        res.render('workerDisplayList', {results});
+    })
+})
 
 module.exports = router;

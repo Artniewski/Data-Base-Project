@@ -79,11 +79,9 @@ router.get('/cancel-order', isLoggedInManager, (req, res) => {
 
 router.post('/cancel-order', isLoggedInManager, (req, res) => {
     const {ID} = req.body;
-    managerPool.query('update orders' +
-        ' set status = \'cancelled\' ' +
-        'where ID = ?', [ID], function (err, results, fields) {
+    managerPool.query('call cancel_order(?)', [ID], function (err, results, fields) {
         console.log(err)
-        res.redirect('/manager-panel');
+        res.redirect('cancel-order');
     })
 })
 

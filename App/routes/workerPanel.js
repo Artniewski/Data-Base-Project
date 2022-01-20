@@ -65,11 +65,11 @@ router.post('/orders', isLoggedIn, (req, res) => {
         date
     } = req.body;
     workerPool.query(
-        'call add_order(?, ?, ?, ?, ?, ?, ?, ?)',
+        'call add_order(?, ?, ?, ?, ?, ?, ?, ?, ?)',
         [customer_name, customer_lastname, customer_phone, customer_email, modelID, storeID, userID, car_color, date]
         , function (err, result, fields) {
-            //res.json(result);
-            res.redirect('/worker-panel');
+            console.log(err)
+            res.redirect('orders');
         }
     )
 })
@@ -87,5 +87,24 @@ router.get('/cars', isLoggedIn, (req, res) => {
         }
     )
 })
+
+router.get('/cars/all', isLoggedIn, (req, res) => {
+    workerPool.query('select * from Models', function (err, results) {
+        res.render('workerDisplayList', {results});
+    })
+})
+
+router.get('/brands/all', isLoggedIn, (req, res) => {
+    workerPool.query('select * from Brands', function (err, results) {
+        res.render('workerDisplayList', {results});
+    })
+})
+
+router.get('/stores/all', isLoggedIn, (req, res) => {
+    workerPool.query('select * from Stores', function (err, results) {
+        res.render('workerDisplayList', {results});
+    })
+})
+
 
 module.exports = router;

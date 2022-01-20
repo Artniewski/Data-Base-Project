@@ -53,8 +53,8 @@
             <% }) %>
             <div class="col-sm text-start">
                 <form action="/manager-panel/cancel-order" method="post">
-                    <button type="sumbit" class="w-75 btn btn-lg btn-outline-primary"
-                            name="ID" value=<%= my_row.ID %>>Cancel
+                    <button type="sumbit" class="w-100 btn btn-md btn-outline-primary"
+                            name="ID" value=<%= my_row.ID %> <%if(my_row.status === "cancelled"){"disabled"}%>>Cancel
                     </button>
                 </form>
             </div>

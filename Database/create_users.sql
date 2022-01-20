@@ -32,6 +32,7 @@ GRANT UPDATE ON orders TO manager;
 GRANT EXECUTE ON PROCEDURE add_brand TO manager;
 GRANT EXECUTE ON PROCEDURE add_car_model TO manager;
 GRANT EXECUTE ON PROCEDURE add_car_to_store TO manager;
+GRANT EXECUTE ON PROCEDURE cancel_order TO manager;
 
 GRANT INSERT,DELETE ON Users TO admin;
 #TODO: zmienic w sprawozdaniu, ze manager zajmuje sie inwentaryzacja sklepu
