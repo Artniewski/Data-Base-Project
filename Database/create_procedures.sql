@@ -109,14 +109,19 @@ drop procedure if exists add_car_model;
 create procedure add_car_model(IN brand_name varchar(50), brand_country varchar(50), car_name varchar(50),
                                car_price float, car_max_speed decimal(5, 2), out b_ID int, out m_ID int)
 begin
-
-    call add_brand(brand_name, brand_country, b_ID);
-    insert ignore into Models (brandID, name, price, max_speed)
-        value (b_ID, car_name, car_price, car_max_speed);
-    select ID
-    into m_ID
-    from models
-    where (brandID, name, price, max_speed) = (b_ID, car_name, car_price, car_max_speed);
+    start transaction ;
+    if exists(select name from models where name = car_name) then
+        rollback ;
+    else
+        call add_brand(brand_name, brand_country, b_ID);
+        insert ignore into Models (brandID, name, price, max_speed)
+            value (b_ID, car_name, car_price, car_max_speed);
+        select ID
+        into m_ID
+        from models
+        where (brandID, name, price, max_speed) = (b_ID, car_name, car_price, car_max_speed);
+        commit;
+    end if;
 end;
 $$
 DELIMITER ;
@@ -135,10 +140,9 @@ create procedure add_order(IN c_name varchar(50), c_lastname varchar(50),
 begin
     declare carAmount int;
     start transaction;
-    call add_customer(c_name, c_lastname, c_phone, c_email, @clID);
-
     set carAmount = (select quantity from Cars_in_stores where (modelID, storeID, color) = (mID, sID, car_color));
     if carAmount > 0 then
+        call add_customer(c_name, c_lastname, c_phone, c_email, @clID);
         insert into Orders (customerID, modelID, storeID, userID, color, date, status)
             value (@clID, mID, sID, uID, car_color, d, 'pending');
 
@@ -177,6 +181,36 @@ begin
         rollback;
     end if;
     commit;
+end;
+$$
+DELIMITER ;
+
+
+DELIMITER $$
+drop procedure if exists cancel_order;
+create procedure cancel_order(o_id int)
+begin
+    declare s enum ('pending', 'done','cancelled');
+    declare b_name varchar(50);
+    declare b_country varchar(50);
+    declare m_id int unsigned;
+    declare s_id int unsigned;
+    declare col varchar(20);
+    declare speed decimal(5, 2);
+    declare c_name varchar(50);
+    declare b_id int unsigned;
+    declare c_price float;
+    select modelID, color, storeID into m_id, col, s_id from orders where ID = o_id;
+    select max_speed, name, price into speed, c_name, c_price from models where ID = m_id;
+    select status into s from orders where ID = o_id;
+    select brandID into b_id from models where ID = m_id;
+    select name, country into b_name,b_country from brands where ID = b_id;
+    if s = 'pending' then
+        update orders
+        set status = 'cancelled'
+        where (ID = o_id);
+        call add_car_to_store(b_name, b_country, c_name, c_price, speed, s_id, 1, col);
+    end if;
 end;
 $$
 DELIMITER ;
