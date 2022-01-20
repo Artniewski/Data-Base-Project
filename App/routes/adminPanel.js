@@ -31,7 +31,7 @@ router.post('/shops', isLoggedInAdmin, ((req, res) => {
         ,
         function (err, results, fields) {
             console.log(err)
-            res.redirect('/admin-panel')
+            res.redirect('/worker-panel/stores/all')
         }
     );
 }))
@@ -52,7 +52,7 @@ router.post('/users',isLoggedInAdmin, (async (req, res) => {
         [login, password, type, name, lastname, gender],
         function (err, results, fields) {
             console.log(err)
-            res.redirect('/admin-panel');
+            res.redirect('users');
         }
     );
 }))

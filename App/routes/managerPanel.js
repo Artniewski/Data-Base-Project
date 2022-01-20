@@ -29,7 +29,7 @@ router.post('/brands', isLoggedInManager, ((req, res) => {
         'call add_brand(?, ?, @a);', [name, country],
         function (err, results, fields) {
             console.log(err)
-            res.redirect('/manager-panel')
+            res.redirect('/worker-panel/brands/all')
         }
     );
 }))
@@ -49,7 +49,7 @@ router.post('/cars', isLoggedInManager, ((req, res) => {
         [name, country, car_name, car_price, car_max_speed],
         function (err, results, fields) {
             console.log(err)
-            res.redirect('/manager-panel');
+            res.redirect('/worker-panel/cars/all');
         }
     );
 }))
@@ -64,7 +64,7 @@ router.post('/cars-to-stores', isLoggedInManager, (req, res) => {
         [brand_name, brand_country, car_name, car_price, car_max_speed, store_ID, qty, car_color],
         function (err, results, fields) {
             console.log(err)
-            res.redirect('/manager-panel');
+            res.redirect('/worker-panel/cars');
         }
     )
 })
