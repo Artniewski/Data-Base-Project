@@ -48,7 +48,7 @@ create table Stores
     number       varchar(4)  not null,
     zip_code     char(5)     not null,
     phone_number int unsigned,
-    primary key (ID, city, street, number, zip_code, phone_number),
+    primary key (ID, city, street, number, zip_code),
     check ( phone_number >= 100000000 and phone_number <= 999999999 )
 );
 
